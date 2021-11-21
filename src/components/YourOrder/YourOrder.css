@@ -1,0 +1,135 @@
+.title-orders{
+    display: flex;
+    justify-content:space-between;
+}
+
+.orders-content{
+    display: flex;
+    justify-content:space-between;
+}
+
+.title{
+    display: flex;
+    color: #EEB365;
+    font-size:10px;
+    align-items: center;
+}
+
+.title-icon{
+    font-size:50px;
+    padding: 5px;
+    margin-right: 25px;
+}
+
+.viewall-btn{
+   padding: 10px;
+   width: 200px;
+   background-color: #EEB365;
+   border: none;
+   border-radius: 10px;
+   outline: none;
+   color: #F4F4F4;
+   box-shadow:-1px 3px 3px rgba(0,0,0,0.2);
+   font-weight: bold;
+   font-size: 18px;
+   font-family: 'Montserrat', sans-serif;
+   cursor: pointer;
+}
+
+.viewall-btn:active {
+  box-shadow: -1px 1.5px 1.5px rgba(31, 27, 27, 0.4);
+  transform: translateY(2px);
+}
+
+.checkout-box{
+    display:flex;
+    flex-direction: column;
+    background-color: #EEB365;
+    color: #F4F4F4;
+    width:40vw;
+    height: fit-content;
+    padding: 25px;
+    margin:20px 10px; 
+    box-shadow: -1px 1.5px 1.5px rgba(31, 27, 27, 0.4);
+    border-radius:10px;
+}
+
+.checkout-title {
+    display: flex;
+    font-size:10px;
+    align-items: center;
+}
+
+.checkout-icon {
+    font-size:50px;
+    padding: 5px;
+}
+
+ul {
+    list-style: none;
+}
+
+ul li::before {
+    content: "\2022";
+    font-weight: bold;
+    display: inline-block; 
+    width: 0.5em;
+    margin-left: 2em;
+    margin-right: 2em;
+    height: 1.4em;
+    transform: scale(5);
+}
+
+ul li{
+    margin:10px 0;
+    font-weight: bold;
+}
+
+.placebtn{
+   padding: 10px;
+   margin: 20px;
+   border: none;
+   border-radius: 10px;
+   outline: none;
+   font-weight: bold;
+   font-size: 18px;
+   font-family: 'Montserrat', sans-serif;
+   cursor: pointer;
+   width: 200px;
+   background-color: #F4F4F4;
+   color: #EEB365;
+   box-shadow:-1px 3px 3px rgba(0,0,0,0.2);
+}
+
+.placebtn:active {
+    box-shadow: -1px 1.5px 1.5px rgba(31, 27, 27, 0.4);
+    transform: translateY(2px);
+  }
+  
+
+@media (max-width: 960px) {
+    .title{
+        font-size: 8px;
+    }
+    .title-icon{
+        font-size:35px;
+    }
+    .viewall-btn{
+        padding: 10px;
+        font-size: 14px;
+        width: 150px;
+    }
+    .orders-content{
+        flex-direction: column;
+    }
+    .checkout-box{
+        width: 91vw;
+        padding: 15px;
+        margin:10px; 
+    }
+    .placebtn{
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+

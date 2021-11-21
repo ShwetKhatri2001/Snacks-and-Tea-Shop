@@ -1,0 +1,93 @@
+.ordercard{
+   position: relative;
+   background-color: #EEB365;
+   box-shadow: -1px 1.5px 1.5px rgba(31, 27, 27, 0.4);
+   width: 50vw;
+   padding: 25px;
+   border-radius:10px;
+   margin:20px 10px; 
+   display: flex;
+}
+
+.itemimg {
+    width: 150px;
+    border-radius: 50%;
+    margin-right: 50px;
+}
+
+.left_detail {
+    line-height: 30px;
+    color: #F4F4F4;
+}
+
+.right_detail {
+    display: flex;
+    position: absolute;
+    align-items: center;
+    right: 30px;
+    bottom: 20px;
+}
+
+.delete_icon{
+    color: #F4F4F4;
+    font-size: 35px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.quantity {
+    border: none;
+    box-shadow: -1px 1.5px 1.5px rgba(31, 27, 27, 0.4);
+    border-radius: 5px;
+}
+
+.pluscountbtn {
+    width: 30px;
+    height: 30px;
+    color: #EEB365;
+    background-color: #EEE;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.minuscountbtn {
+    width: 30px;
+    height: 30px;
+    color: #EEB365;
+    background-color: #EEE;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.currcount {
+    width: 60px;
+    height: 30px;
+    color: #EEB365;
+    background-color: #F4F4F4;
+    border: none;
+    border-radius: 0;
+    font-size: 20px;
+}
+
+
+@media (max-width: 960px) {
+    .ordercard{
+        width: 91vw;
+        padding: 15px;
+    }
+    .itemimg {
+        width: 100px;
+        margin-right: 20px;
+    }
+    .right_detail {
+        right: 20px;
+    }
+    .delete_icon{
+        font-size: 30px;
+        margin-left: 15px;
+    }
+}
