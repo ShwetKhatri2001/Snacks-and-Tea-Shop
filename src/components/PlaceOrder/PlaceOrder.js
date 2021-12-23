@@ -94,9 +94,12 @@ const PlaceOrder = () => {
                     <Icon icon="emojione:face-savoring-food" className="smile-icon"/>
                  </h4>
                 </div>
-                <button className="placeview-btn">
-                    View All Orders
-                </button>
+                <Link to="/allorders">
+                  <button className="placeview-btn">
+                     View All Orders
+                  </button>
+                </Link>
+                
               </div>
               }
             </div>

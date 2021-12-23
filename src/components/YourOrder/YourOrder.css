@@ -1,11 +1,14 @@
 .title-orders{
     display: flex;
     justify-content:space-between;
+    padding: 0 2% 0 0;
 }
 
 .orders-content{
     display: flex;
     justify-content:space-between;
+    padding: 0 2%;
+
 }
 
 .title{
@@ -13,6 +16,7 @@
     color: #EEB365;
     font-size:10px;
     align-items: center;
+    padding: 0 2%;
 }
 
 .title-icon{

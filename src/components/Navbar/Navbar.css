@@ -2,7 +2,11 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 20px;
+	padding: 1% 2%;
+	position: sticky; 
+	top: 0;
+	z-index: 1;
+	background-color:#FFF;
 }
 
 .heading {
@@ -24,6 +28,26 @@ h3 {
 	padding: 10px;
 	padding-left: 20px;
 	font-size: 25px;
+}
+
+.right_nav{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.searchinput{
+	border: 2px solid #EEB365;
+	border-radius: 5px;
+	padding: 10px;
+	outline: none;
+	margin-right: 25px;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.order-icon {
+	color: #EEB365;
+	margin-left: 20px;
 }
 
 

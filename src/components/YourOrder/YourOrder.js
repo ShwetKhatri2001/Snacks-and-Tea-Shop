@@ -38,9 +38,11 @@ const YourOrder = () => {
                     <Icon icon="ant-design:shopping-cart-outlined" className="title-icon"/>
                     <h1>Your Order</h1>
                 </div>
+                <Link to="/allorders">
                 <button className="viewall-btn">
                     View All Orders
                 </button>
+                </Link>
             </div>
             <div className="orders-content">
               <div>

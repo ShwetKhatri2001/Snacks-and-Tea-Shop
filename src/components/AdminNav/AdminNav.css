@@ -1,0 +1,26 @@
+.adminnav {
+   padding: 2%;
+   height: 95vh;
+   background-color: #F4F4F4;
+   width: 275px;
+   border-radius: 0 20px 0 0;
+   position: fixed;
+}
+
+.admintitle{
+    padding: 5px 0;
+    display: flex;
+    font-size:10px;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.2s;
+}
+
+.admintitle:hover{
+    color: #EEB365;
+}
+
+.activetitle{
+    color: #EEB365;
+}

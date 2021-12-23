@@ -1,0 +1,26 @@
+.adminpage{
+    display: flex;
+}
+
+.admin_items {
+    margin-left: 350px;
+}
+
+.managebtn{
+   margin: 40px 0;
+   margin-right: 4%;
+   display: flex;
+   align-items: right;
+   justify-content: right;
+   text-decoration: none;
+}
+
+.empdiv{
+    background-color:#88C198;
+}
+
+.empbtn {
+    background-color: #88C198;
+}
+
+

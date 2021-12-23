@@ -1,0 +1,7 @@
+.all_items {
+   display: flex;
+   flex-wrap: wrap;
+   align-items: center;
+   justify-content: left;
+   margin: 0 2%;
+}

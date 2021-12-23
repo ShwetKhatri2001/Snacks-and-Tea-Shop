@@ -1,0 +1,44 @@
+.itemdiv{
+    width: 200px;
+    height: 320px;
+    padding:10px;
+    background-color: #EEB365;
+    border-radius: 5px;
+    color: #F4F4F4;
+    margin: 12px;
+    text-align: center;
+    box-shadow:-1px 3px 3px rgba(0,0,0,0.2);
+}
+
+.itemimg{
+   border-radius: 50%;
+   align-items: center;
+   margin: 15px;
+}
+
+.item_detail{
+    width: 100%;
+    text-align: center;
+    align-items: center;
+}
+
+.addbtn{
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    font-weight: bold;
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    width: 150px;
+    background-color: #F4F4F4;
+    color: #EEB365;
+    box-shadow:-1px 3px 3px rgba(0,0,0,0.2);
+ }
+ 
+.addbtn:active {
+     box-shadow: -1px 1.5px 1.5px rgba(31, 27, 27, 0.4);
+     transform: translateY(2px);
+}

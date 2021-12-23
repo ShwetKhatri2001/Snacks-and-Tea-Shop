@@ -33,7 +33,6 @@ const OrderCard = ({item}) => {
                 <Icon icon="fluent:delete-16-filled" className="delete_icon"/>
                 </div>
            </div>
-            
         </div>
     )
 }
