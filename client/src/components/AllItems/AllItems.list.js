@@ -9,7 +9,7 @@ import coffeeimg from "../../assets/coffee.png";
 
 const AllItems = [
     {
-        id: 0,
+        _id: 0,
         itemimg: teaimg,
         name: "Tea",
         price: 10,
@@ -17,7 +17,7 @@ const AllItems = [
         todays_sp: true
     },
     {
-       id: 1,
+       _id: 1,
        itemimg: samosaimg,
        name: "Samosa",
        price: 20,
@@ -25,7 +25,7 @@ const AllItems = [
        todays_sp: true
     },
     {
-        id: 2,
+        _id: 2,
         itemimg: pohaimg,
         name: "Poha",
         price: 20,
@@ -33,7 +33,7 @@ const AllItems = [
         todays_sp: true
     },
     {
-       id: 3,
+       _id: 3,
        itemimg: parathaimg,
        name: "Aaloo Paratha",
        price: 40,
@@ -41,7 +41,7 @@ const AllItems = [
        todays_sp: false
     },
     {
-       id: 4,
+       _id: 4,
        itemimg: coffeeimg,
        name: "Coffee",
        price: 20,
@@ -49,14 +49,14 @@ const AllItems = [
        todays_sp: true
     },
     {
-       id: 5,
+       _id: 5,
        itemimg: parathaimg,
        name: "Paneer Paratha",
        price: 80,
        quantity: 1,
        todays_sp: true
     },
-    {  id: 6,
+    {  _id: 6,
        itemimg: bhelimg,
        name: "Bhel",
        price: 20,
@@ -64,7 +64,7 @@ const AllItems = [
        todays_sp: false
     },
     {
-        id: 7,
+        _id: 7,
         itemimg: pavbhajiimg,
         name: "Pavbhaji",
         price: 60,

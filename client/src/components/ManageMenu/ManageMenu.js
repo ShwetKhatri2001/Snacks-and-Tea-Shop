@@ -19,6 +19,8 @@ import Avatar from '@material-ui/core/Avatar';
 import AllItems  from '../AllItems/AllItems.list';
 import AdminNav from '../AdminNav/AdminNav';
 import addfoodimg from "../../assets/addfood.jpg";
+import { AddItem, EditItem, RemoveItem } from '../../axios/instance';
+import { ToastContainer, toast } from 'react-toastify';
 
 const useRowStyles = makeStyles((theme) => ({
   header: {
@@ -79,7 +81,7 @@ const Row = (props) => {
     <>
       <TableRow className={classes.root}>
         {
-           removeIdx === row.id
+           removeIdx === row._id
            ? 
            <>
            <TableCell style={{width: '20px'}}>
@@ -89,7 +91,7 @@ const Row = (props) => {
               <Typography variant="h6" className={classes.primary}>{`Are You sure You want to remove this item ( ${row.name} ) ? `}</Typography> 
            </TableCell>
            <TableCell align="left" >
-             <IconButton onClick={() => EndRemoving(row.id)} className={classes.green}><DoneIcon /></IconButton>
+             <IconButton onClick={() => EndRemoving(row._id)} className={classes.green}><DoneIcon /></IconButton>
              <IconButton onClick={() => CancelRemoving()} className={classes.primary}><CloseIcon /></IconButton>
            </TableCell>
            </>
@@ -100,12 +102,12 @@ const Row = (props) => {
         </TableCell>
         <TableCell align="left" style={{width: '200px'}}>
           {
-            editIdx === row.id 
+            editIdx === row._id 
             ? <TextField 
               name="name"
               type="string"
               value={row.name}
-              onChange={e => handleChange(e, "name", row.id)}
+              onChange={e => handleChange(e, "name", row._id)}
               className={classes.name}
               InputProps={{ classes: {
                 underline: classes.underline,
@@ -118,12 +120,12 @@ const Row = (props) => {
         <TableCell align="left">
         {" "}
         {
-          editIdx === row.id 
+          editIdx === row._id 
             ? <TextField 
-              type="number"
+              type="string"
               name="price"
               value={row.price}
-              onChange={e => handleChange(e, "price", row.id)}
+              onChange={e => handleChange(e, "price", row._id)}
               className={classes.name}
               InputProps={{ classes: {
                 underline: classes.underline,
@@ -136,12 +138,12 @@ const Row = (props) => {
         <TableCell align="left">
         {" "}
         {
-          editIdx === row.id 
+          editIdx === row._id 
             ? <TextField 
               type="string"
               name="quantity"
               value={row.quantity}
-              onChange={e => handleChange(e, "quantity", row.id)}
+              onChange={e => handleChange(e, "quantity", row._id)}
               className={classes.name}
               InputProps={{ classes: {
                 underline: classes.underline,
@@ -154,12 +156,12 @@ const Row = (props) => {
         <TableCell align="left">
         {" "}
         {
-          editIdx === row.id 
+          editIdx === row._id 
             ? <TextField 
               type="string"
               name="todays_sp"
               value={row.todays_sp ? "Yes" : "No"}
-              onChange={e => handleChange(e, "todays_sp", row.id)}
+              onChange={e => handleChange(e, "todays_sp", row._id)}
               className={classes.name}
               InputProps={{ classes: {
                 underline: classes.underline,
@@ -171,28 +173,17 @@ const Row = (props) => {
         </TableCell>
         <TableCell align="left">
           {
-            editIdx === row.id 
-            ? <IconButton onClick={() => EndEditing(row.id)} className={classes.green}><DoneIcon /></IconButton>
-            : <IconButton onClick={() => StartEditing(row.id)} className={classes.secondary}><EditIcon /></IconButton>
+            editIdx === row._id 
+            ? <IconButton onClick={() => EndEditing(row._id)} className={classes.green}><DoneIcon /></IconButton>
+            : <IconButton onClick={() => StartEditing(row._id)} className={classes.secondary}><EditIcon /></IconButton>
           }
-          <IconButton onClick={() => StartRemoving(row.id)} className={classes.primary}><DeleteIcon/></IconButton>
+          <IconButton onClick={() => StartRemoving(row._id)} className={classes.primary}><DeleteIcon/></IconButton>
         </TableCell>
         </>
       }
       </TableRow>
     </>
   );
-}
-
-function createRow(id, itemimg, name, price, quantity, todays_sp) {
-  return {
-    id,
-    itemimg,
-    name,
-    price,
-    quantity,
-    todays_sp,
-  };
 }
 
 const ManageMenu = () => {
@@ -202,21 +193,86 @@ const ManageMenu = () => {
   const [allrows, setAllRows] = useState(AllItems);
   const classes = useRowStyles();
 
+  const handleAddItem = async () => {
+    const newitem = { 
+      name: 'New Item',
+      price: 0,
+      quantity: 1,
+      todays_sp: true,
+      itemimg: addfoodimg
+    };
+
+    const res = await AddItem(newitem); 
+
+    try{
+      if (!res.data.error)
+      {
+         toast.success('New Item added successfully');
+         setAllRows([res.data, ...allrows]);
+         setEditIdx(res.data._id); 
+      }
+   } catch (err) {
+      if (err.response)
+      {
+      toast.error(`${ err.response.data.error }`);
+      }
+   }
+
+  }
+
   const StartEditing = (editid) => {
     setEditIdx(editid);
   }
 
-  const EndEditing = (editid) => {
+  const EndEditing = async (editid) => {
+
+    let edititem = {}
+    
+    allrows.map((row) => {
+      if(row._id == editid) 
+         edititem = row
+      }
+    )
+
+    const res = await EditItem(edititem); 
+
+    try{
+        if (!res.data.error)
+        {
+          toast.success(res.data.data);
+          setEditIdx(-1);
+        }
+    } catch (err) {
+        if (err.response)
+        {
+          toast.error(`${ err.response.data.error }`);
+        }
+    }
     setEditIdx(-1);
   }
+
 
   const StartRemoving = (removeid) => {
     setRemoveIdx(removeid);
   }
 
-  const EndRemoving = (removeid) => {
-    setAllRows( allrows.filter((row) => row.id !== removeid ));
-    setRemoveIdx(-1);
+  const EndRemoving = async (removeid) => {
+
+    const res = await RemoveItem({ _id : removeid }); 
+
+    try{
+      if (!res.data.error)
+      {
+        toast.success(res.data.data);
+        setAllRows( allrows.filter((row) => row._id !== removeid ));
+        setRemoveIdx(-1);
+      }
+    } catch (err) {
+      if (err.response)
+      {
+        toast.error(`${ err.response.data.error }`);
+      }
+    }
   }
 
   const CancelRemoving = () => {
@@ -227,20 +283,15 @@ const ManageMenu = () => {
     const { value } = e.target;
     setAllRows(
       allrows.map((row) => 
-          row.id == changeid ? {...row, [name] : value} : row
+          row._id == changeid ? {...row, [name] : value} : row
       )
     )
-  }
-
-  const handleAddItem = () => {
-    const newitem = createRow(allrows.length + 1, addfoodimg, 'New Item', 0, 'Yes', 'Yes');
-    setAllRows([newitem, ...allrows]);
-    setEditIdx(allrows.length + 1);
   }
 
   return (
     <>
       <AdminNav />
+      <ToastContainer position="bottom-left" bodyClassName="toastBody"/>
       <div className="admin_items">
       <div className="title-orders">
           <div className="title">
@@ -267,7 +318,7 @@ const ManageMenu = () => {
         <TableBody>
           {allrows.map((row) => (
             <Row 
-              key={row.id} 
+              key={row._id} 
               row={row} 
               editIdx={editIdx}
               removeIdx={removeIdx}

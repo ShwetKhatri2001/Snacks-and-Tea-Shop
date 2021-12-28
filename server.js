@@ -1,47 +1,29 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const swaggerJsDoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
+const path = require('path');
+const logger = require('morgan');
 const connectDB = require("./config/db");
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
-const swaggerOptions = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Snacks And Tea API",
-      version: "1.0.0",
-      description: "Snacks And Tea API created with NodeJs & ExpressJs",
-    },
-    servers: [
-        {
-          url: `http://localhost:${PORT}`,
-        },
-    ],
-  },
-  apis: ["./routes/*.js"],
-};
-
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
 const app = express(); 
 app.use(cors());
 app.use(express.json());
+app.use(logger('dev'));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 connectDB();
 
 const orderRouter = require('./routes/orderRoutes');
-const menuRouter = require('./routes/orderRoutes');
-const empRouter = require('./routes/orderRoutes');
+const menuRouter = require('./routes/menuRoutes');
+const empRouter = require('./routes/empRoutes');
 
 app.use('/api/order', orderRouter);
 app.use('/api/menu', menuRouter);
 app.use('/api/emp', empRouter);;
-
-app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 if(process.env.NODE_ENV === 'production'){
     app.use(express.static('client/build'))

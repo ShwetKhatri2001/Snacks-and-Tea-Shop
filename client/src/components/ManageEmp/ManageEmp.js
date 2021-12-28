@@ -19,6 +19,8 @@ import Avatar from '@material-ui/core/Avatar';
 import AllEmployees  from '../EmpDetails/AllEmp.list';
 import AdminNav from '../AdminNav/AdminNav';
 import addempimg from "../../assets/addemp.jpg";
+import { AddEmployee, EditEmployee, RemoveEmployee } from '../../axios/instance';
+import { ToastContainer, toast } from 'react-toastify';
 
 const useRowStyles = makeStyles((theme) => ({
   header: {
@@ -80,7 +82,7 @@ const Row = (props) => {
     <>
       <TableRow className={classes.root}>
         {
-           removeIdx === row.id
+           removeIdx === row._id
            ? 
            <>
            <TableCell style={{width: '20px'}}>
@@ -90,7 +92,7 @@ const Row = (props) => {
               <Typography variant="h6" className={classes.primary}>{`Are You sure you want to remove this employee ( ${row.empname} ) ? `}</Typography> 
            </TableCell>
            <TableCell align="left" >
-             <IconButton onClick={() => EndRemoving(row.id)} className={classes.green}><DoneIcon /></IconButton>
+             <IconButton onClick={() => EndRemoving(row._id)} className={classes.green}><DoneIcon /></IconButton>
              <IconButton onClick={() => CancelRemoving()} className={classes.primary}><CloseIcon /></IconButton>
            </TableCell>
            </>
@@ -101,12 +103,12 @@ const Row = (props) => {
         </TableCell>
         <TableCell align="left" style={{width: '200px'}}>
           {
-            editIdx === row.id 
+            editIdx === row._id 
             ? <TextField 
               name="empname"
               type="string"
               value={row.empname}
-              onChange={e => handleChange(e, "empname", row.id)}
+              onChange={e => handleChange(e, "empname", row._id)}
               className={classes.empname}
               InputProps={{ classes: {
                 underline: classes.underline,
@@ -119,12 +121,12 @@ const Row = (props) => {
         <TableCell align="left">
         {" "}
         {
-          editIdx === row.id 
+          editIdx === row._id 
             ? <TextField 
               type="string"
               name="emprole"
               value={row.emprole}
-              onChange={e => handleChange(e, "emprole", row.id)}
+              onChange={e => handleChange(e, "emprole", row._id)}
               className={classes.name}
               InputProps={{ classes: {
                 underline: classes.underline,
@@ -137,12 +139,12 @@ const Row = (props) => {
         <TableCell align="left">
         {" "}
         {
-          editIdx === row.id 
+          editIdx === row._id 
             ? <TextField 
               type="string"
               name="emploc"
               value={row.emploc}
-              onChange={e => handleChange(e, "emploc", row.id)}
+              onChange={e => handleChange(e, "emploc", row._id)}
               className={classes.name}
               InputProps={{ classes: {
                 underline: classes.underline,
@@ -155,12 +157,12 @@ const Row = (props) => {
         <TableCell align="left">
         {" "}
         {
-          editIdx === row.id 
+          editIdx === row._id 
             ? <TextField 
               type="string"
               name="empdate"
               value={row.empdate}
-              onChange={e => handleChange(e, "empdate", row.id)}
+              onChange={e => handleChange(e, "empdate", row._id)}
               className={classes.name}
               InputProps={{ classes: {
                 underline: classes.underline,
@@ -172,28 +174,17 @@ const Row = (props) => {
         </TableCell>
         <TableCell align="left">
           {
-            editIdx === row.id 
-            ? <IconButton onClick={() => EndEditing(row.id)} className={classes.green}><DoneIcon /></IconButton>
-            : <IconButton onClick={() => StartEditing(row.id)} className={classes.secondary}><EditIcon /></IconButton>
+            editIdx === row._id 
+            ? <IconButton onClick={() => EndEditing(row._id)} className={classes.green}><DoneIcon /></IconButton>
+            : <IconButton onClick={() => StartEditing(row._id)} className={classes.secondary}><EditIcon /></IconButton>
           }
-          <IconButton onClick={() => StartRemoving(row.id)} className={classes.primary}><DeleteIcon/></IconButton>
+          <IconButton onClick={() => StartRemoving(row._id)} className={classes.primary}><DeleteIcon/></IconButton>
         </TableCell>
         </>
       }
       </TableRow>
     </>
   );
-}
-
-function createRow(id, empimg, empname, emprole, emploc, empdate ) {
-  return {
-    id,
-    empimg,
-    empname,
-    emprole,
-    emploc,
-    empdate
-  };
 }
 
 const ManageEmp = () => {
@@ -203,11 +194,61 @@ const ManageEmp = () => {
   const [allrows, setAllRows] = useState(AllEmployees);
   const classes = useRowStyles();
 
+  const handleAddEmp = async () => {
+    const newemp = { 
+      empname: 'New Member',
+      emprole: 'Staff Member',
+      emploc: 'Jaipur',
+      empimg: addempimg,
+      empdate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`
+    };
+
+    const res = await AddEmployee(newemp); 
+
+    try{
+      if (!res.data.error)
+      {
+         toast.success('Employee added successfully');
+         setAllRows([res.data, ...allrows]);
+         setEditIdx(res.data._id); 
+      }
+   } catch (err) {
+      if (err.response)
+      {
+      toast.error(`${ err.response.data.error }`);
+      }
+   }
+
+  }
+
   const StartEditing = (editid) => {
     setEditIdx(editid);
   }
 
-  const EndEditing = (editid) => {
+  const EndEditing = async (editid) => {
+
+    let editemployee = {}
+    
+    allrows.map((row) => {
+      if(row._id == editid) 
+         editemployee = row
+      }
+    )
+
+    const res = await EditEmployee(editemployee); 
+
+    try{
+        if (!res.data.error)
+        {
+          toast.success(res.data.data);
+          setEditIdx(-1);
+        }
+    } catch (err) {
+        if (err.response)
+        {
+          toast.error(`${ err.response.data.error }`);
+        }
+    }
     setEditIdx(-1);
   }
 
@@ -215,9 +256,23 @@ const ManageEmp = () => {
     setRemoveIdx(removeid);
   }
 
-  const EndRemoving = (removeid) => {
-    setAllRows( allrows.filter((row) => row.id !== removeid ));
-    setRemoveIdx(-1);
+  const EndRemoving = async (removeid) => {
+
+    const res = await RemoveEmployee({ _id : removeid }); 
+
+    try{
+      if (!res.data.error)
+      {
+        toast.success(res.data.data);
+        setAllRows( allrows.filter((row) => row._id !== removeid ));
+        setRemoveIdx(-1);
+      }
+    } catch (err) {
+      if (err.response)
+      {
+        toast.error(`${ err.response.data.error }`);
+      }
+    }
   }
 
   const CancelRemoving = () => {
@@ -228,21 +283,16 @@ const ManageEmp = () => {
     const { value } = e.target;
     setAllRows(
       allrows.map((row) => 
-          row.id == changeid ? {...row, [name] : value} : row
+          row._id == changeid ? {...row, [name] : value} : row
       )
     )
   }
 
-  const handleAddEmp = () => {
-    const newemp = createRow(allrows.length + 1, addempimg, 'New Member', 'Staff Member', 'Jaipur', 
-    `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`);
-    setAllRows([newemp, ...allrows]);
-    setEditIdx(allrows.length + 1);
-  }
 
   return (
     <>
       <AdminNav />
+      <ToastContainer position="bottom-left" bodyClassName="toastBody"/>
       <div className="admin_items">
       <div className="title-orders">
           <div className="title">
@@ -269,7 +319,7 @@ const ManageEmp = () => {
         <TableBody>
           {allrows.map((row) => (
             <Row 
-              key={row.id} 
+              key={row._id} 
               row={row} 
               editIdx={editIdx}
               removeIdx={removeIdx}

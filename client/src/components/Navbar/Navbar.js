@@ -7,8 +7,6 @@ import "./Navbar.css";
 
 const Navbar = () => {
 
-    const [search, setSearch] = useState("");
-
     return (
         <div className="navbar">
             <div className="heading">
@@ -16,13 +14,6 @@ const Navbar = () => {
                 <Link to="/" className="shoplink" ><h3>Vinayak Snacks and Tea</h3></Link>
             </div>
             <div className="right_nav">
-               <input 
-                type="text" 
-                className="searchinput"
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                />
                 <Link to="/managemenu">
                 <button className="viewall-btn">
                     Shop Staff

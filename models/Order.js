@@ -4,7 +4,6 @@ const orderSchema = new mongoose.Schema({
   orderno: {
     type: Number,
     unique: true,
-    required: true,
   },
   placedat: {
     type: String,
@@ -15,7 +14,7 @@ const orderSchema = new mongoose.Schema({
     required: true
   },
   phone: {
-    type: Number,
+    type: String,
     required: true
   },
   status: {
@@ -28,7 +27,7 @@ const orderSchema = new mongoose.Schema({
         required: true
       },
       quantity: { 
-        type: String,
+        type: Number,
         required: true
       }
   }],

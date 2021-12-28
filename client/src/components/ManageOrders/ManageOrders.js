@@ -1,33 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import AdminNav from '../AdminNav/AdminNav';
-import AllOrders from '../AllOrders/AllOrders.list'
+import AllOrders from '../AllOrders/AllOrders.list';
+import { EditOrder, RemoveOrder } from '../../axios/instance';
+import { ToastContainer, toast } from 'react-toastify';
 import './ManageOrders.css';
 
 const ManageOrders = () => {
 
-    const [requests,setRequests] = useState([]);
-    const [pending, setPending] = useState([]);
-    const [finished, setFinished] = useState([]);
-
-    // useEffect(() => {
-    //     return AllOrders.map((order) => {
-    //         switch(order.status){
-    //             case "Request Received":
-    //                 setRequests([...requests,order]);
-    //                 break;
-    //             case "Being Prepared": 
-    //                 setPending([...pending,order]);
-    //                 break;
-    //             case "Ready to Pick": 
-    //                 setFinished([...finished,order]);
-    //         }
-    //     })
-    // },[AllOrders])
-
     return (
         <>
             <AdminNav />
+            <ToastContainer position="bottom-left" bodyClassName="toastBody"/>
             <div className="admin_items">
             <div className="title-orders">
                 <div className="title">

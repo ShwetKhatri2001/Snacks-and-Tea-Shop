@@ -36,15 +36,6 @@ h3 {
 	align-items: center;
 }
 
-.searchinput{
-	border: 2px solid #EEB365;
-	border-radius: 5px;
-	padding: 10px;
-	outline: none;
-	margin-right: 25px;
-	font-family: 'Montserrat', sans-serif;
-}
-
 .order-icon {
 	color: #EEB365;
 	margin-left: 20px;

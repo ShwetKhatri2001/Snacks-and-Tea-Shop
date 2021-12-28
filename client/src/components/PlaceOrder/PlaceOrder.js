@@ -1,8 +1,9 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import{ Link } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import { PlaceNewOrder } from '../../axios/instance';
 import  AllOrders  from '../AllOrders/AllOrders.list';
+import { OrderContext } from '../YourOrder/YourOrder';
 import { ToastContainer, toast } from 'react-toastify';
 import "./PlaceOrder.css";
 
@@ -14,13 +15,27 @@ const PlaceOrder = () => {
       name: "",
       phone: "",
       status: "",
-      items: [],
-      subtotal: 0
+      items:[]
    });
+
+   const {myorder, setMyOrder} = useContext(OrderContext);
+
+   const [subtotal, setSubTotal] = useState(0);
+   const [totalitems, setTotalItems] = useState(0);
+
+   useEffect(() => {
+
+       setTotalItems(myorder.length);
+       
+       myorder.map((item) => {
+           setSubTotal((prevSum) => prevSum + ( item.quantity * item.price));
+       })
+
+   },[myorder])
 
    const [showOrder, setShowOrder] = useState(false);
 
-   const { orderno, placedat, name, phone, status, items, subtotal } = orderData;
+   const { orderno, placedat, name, phone, status } = orderData;
    
    let event_name,event_value;
     const handleFormChange = (e) => {
@@ -31,8 +46,14 @@ const PlaceOrder = () => {
    
    const submitOrder = async () => {
 
+      if(!name) return toast.error('Please enter your name');
+      if(!phone) return toast.error('Please enter your phone number');
       const newplacedat = new Date().toLocaleTimeString();
-      const newdata = {...AllOrders[1], name, phone, placedat: newplacedat};
+
+      const items = myorder.map((item) => { return { name: item.name, quantity: item.quantity } })
+
+      const newdata = {...orderData, name, phone, placedat: newplacedat, items , subtotal};
+      console.log(newdata);
 
       const res = await PlaceNewOrder(newdata);
 
@@ -55,7 +76,6 @@ const PlaceOrder = () => {
          toast.error(`${ err.response.data.error }`);
          }
       }
-      
    }
 
    const clearFields = () => {
@@ -88,7 +108,7 @@ const PlaceOrder = () => {
                      onChange={handleFormChange}
                   />
                   <input 
-                     type="phone" 
+                     type="text" 
                      className="inputfield"
                      placeholder="Phone"
                      name="phone"
@@ -103,13 +123,15 @@ const PlaceOrder = () => {
                  </div>
                  <ul>
                     <li>Sub Total</li>
-                    <li className="orderitem">&#8377; 100 </li>
+                    <li className="orderitem">&#8377; { subtotal }</li>
                     <li>No of Items </li>
-                    <li className="orderitem">4 </li>
+                    <li className="orderitem">{totalitems}</li>
                     <li>Items Ordered : </li>
-                    <li className="orderitem"> Samosa x 2 </li>
-                    <li className="orderitem"> Aaloo Paratha x 1 </li>
-                    <li className="orderitem"> Coffee x 1 </li>
+                    {
+                       myorder.map((item) => {
+                          return <li key={item._id} className="orderitem">{`${item.name} x ${item.quantity}`}</li>
+                       })
+                    }
                  </ul>
                  <div  className="checkout-title">
                     <Link to="/yourorder"><button className="detailsbtn">Check Details</button></Link>

@@ -30,12 +30,12 @@ git clone https://github.com/ShwetKhatri2001/Snacks-and-Tea-Shop.git
 ```
 
 ```bash
-npm install 
+yarn install 
 ```
 
 ```bash
 cd client
-npm install 
+yarn install 
 ```
 
 After installations, make a file `.env` in the root directory of the project. 
@@ -47,12 +47,12 @@ Visit [Mongo DB](https://www.mongodb.com/) and sign up for the free API Key. The
 Then start the react app on localhost and start the backend server using these command.
 
 ```bash
-npm run server
+yarn run server
 ```
 
 ```bash
 cd client
-npm start 
+yarn start 
 ```
 
 ##  🎇 Contributing

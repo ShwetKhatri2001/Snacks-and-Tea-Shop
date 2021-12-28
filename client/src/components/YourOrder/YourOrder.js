@@ -1,35 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { Icon } from '@iconify/react';
 import{ Link } from "react-router-dom";
 import OrderCard from "../../components/OrderCard/OrderCard";
-import samosaimg from "../../assets/samosa.png";
-import parathaimg from "../../assets/paratha.png";
-import coffeeimg from "../../assets/coffee.png";
 import './YourOrder.css';
+
+const OrderContext = createContext();
 
 const YourOrder = () => {
 
-    const ordered_items = [
-        {
-           itemimg: samosaimg,
-           name: "Samosa",
-           price: 20,
-           quantity: 2
-        },
-        {
-           itemimg: parathaimg,
-           name: "Aaloo Paratha",
-           price: 40,
-           quantity: 1
-        },
-        {
-           itemimg: coffeeimg,
-           name: "Coffee",
-           price: 20,
-           quantity: 1
+    const {myorder, setMyOrder} = useContext(OrderContext);
+    const [subtotal, setSubTotal] = useState(0);
+    const [totalitems, setTotalItems] = useState(0);
 
-        }
-    ]
+    useEffect(() => {
+
+        setTotalItems(myorder.length);
+        
+        setSubTotal(0);
+        myorder.map((item) => {
+            setSubTotal((prevSum) => prevSum + ( item.quantity * item.price));
+        })
+
+    },[myorder])
 
     return (
         <>
@@ -45,8 +37,11 @@ const YourOrder = () => {
                 </Link>
             </div>
             <div className="orders-content">
+            {
+                myorder.length > 0 ?
+              <>
               <div>
-              { ordered_items.map((item,i) => <OrderCard key={i} item={item}/> )}
+                { myorder.map((item,i) => <OrderCard key={i} item={item}/> )}
               </div>
               <div className="checkout-box">
                  <div className="checkout-title">
@@ -55,17 +50,31 @@ const YourOrder = () => {
                  </div>
                  <ul>
                     <li>SubTotal</li>
-                    <li className="orderitem">&#8377; 100 </li>
+                    <li className="orderitem">&#8377; {subtotal} </li>
                     <li>No of Items</li>
-                    <li className="orderitem">4</li>
+                    <li className="orderitem">{totalitems}</li>
                  </ul>
                  <Link to="/placeorder">
                     <button className="placebtn">Place Order</button>
                  </Link>
               </div>
+              </>
+              : 
+              <>
+                <div className="emptydiv">
+                    <div className="emptymsg">Your Order is Empty ! Add Items and Enjoy your Food !</div>
+                    <Link to="/allitems">
+                    <button className="viewall-btn">
+                        View All Items
+                    </button>
+                    </Link>
+                </div>
+              </>
+            }
             </div>
         </>
     )
 }
 
-export default YourOrder
+export default YourOrder;
+export { OrderContext };

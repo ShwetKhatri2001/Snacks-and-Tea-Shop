@@ -6,8 +6,7 @@ import "./ViewAllItems.css";
 const ViewAllItems = () => {
     return (
         <div className="all_items">
-            { AllItems.map((item,i) => <ItemCard item={item} key={i} /> ) }
-            { AllItems.map((item,i) => <ItemCard item={item} key={i} /> ) }
+            { AllItems.map((item,i) => <ItemCard item={item} key={item._id} /> ) }
         </div>
     )
 }
