@@ -14,7 +14,7 @@ const AllItems = [
         name: "Tea",
         price: 10,
         quantity: 1,
-        todays_sp: true
+        todays_sp: "Yes"
     },
     {
        _id: 1,
@@ -22,7 +22,7 @@ const AllItems = [
        name: "Samosa",
        price: 20,
        quantity: 2,
-       todays_sp: true
+       todays_sp: "Yes"
     },
     {
         _id: 2,
@@ -30,7 +30,7 @@ const AllItems = [
         name: "Poha",
         price: 20,
         quantity: 1,
-        todays_sp: true
+        todays_sp: "Yes"
     },
     {
        _id: 3,
@@ -46,7 +46,7 @@ const AllItems = [
        name: "Coffee",
        price: 20,
        quantity: 1,
-       todays_sp: true
+       todays_sp: "Yes"
     },
     {
        _id: 5,
@@ -54,7 +54,7 @@ const AllItems = [
        name: "Paneer Paratha",
        price: 80,
        quantity: 1,
-       todays_sp: true
+       todays_sp: "Yes"
     },
     {  _id: 6,
        itemimg: bhelimg,
@@ -69,7 +69,7 @@ const AllItems = [
         name: "Pavbhaji",
         price: 60,
         quantity: 1,
-        todays_sp: true
+        todays_sp: "Yes"
     }
 ]
 

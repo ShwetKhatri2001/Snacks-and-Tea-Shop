@@ -6,11 +6,11 @@ const ItemCard = ({ item } ) => {
 
     const [added, setAdded] = useState(false);
 
-    const { _id, itemimg, name, price, quantity} = item;
+    const { _id, itemimg, name, price } = item;
     const {myorder, setMyOrder} = useContext(OrderContext);
 
     const addtoOrder = (newitem) => {
-         setMyOrder([...myorder, newitem]);
+         setMyOrder([...myorder, { ...newitem, quantity: 1}]);
          setAdded(true);
     }
 

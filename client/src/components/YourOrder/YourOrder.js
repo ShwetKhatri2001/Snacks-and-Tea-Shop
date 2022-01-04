@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { Icon } from '@iconify/react';
-import{ Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import OrderCard from "../../components/OrderCard/OrderCard";
 import './YourOrder.css';
 
@@ -21,7 +21,11 @@ const YourOrder = () => {
             setSubTotal((prevSum) => prevSum + ( item.quantity * item.price));
         })
 
+        console.log(subtotal);
+
     },[myorder])
+
+    
 
     return (
         <>

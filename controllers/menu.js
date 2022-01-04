@@ -76,3 +76,27 @@ exports.removeItem = async (req, res) => {
         return res.status(400).json({ error: "Deletion failed, Try again !" });
     }
 }
+
+exports.getItems = async (req, res) => {
+
+    try {
+        const itemsResult = await Item.find();
+
+        res.status(200).json(itemsResult);
+
+    } catch (error) {
+        return res.status(400).json({ error : "Not getting Items" });
+    }
+}
+
+exports.getTodayssp = async (req, res) => {
+    try {
+
+        const filter = {  todays_sp: { $in: ["Yes", "yes", "Ha", "ha"] } };
+        const todaysResult = await Item.find(filter);
+
+        res.status(200).json(todaysResult);
+    } catch (error) {
+        return res.status(400).json({ error : "Nothing special today"});
+    }
+}

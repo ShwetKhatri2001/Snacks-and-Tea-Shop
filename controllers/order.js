@@ -8,7 +8,7 @@ exports.placeOrder = async (req,res) => {
     }
 
     const { placedat, name, phone, items, subtotal } = req.body;
-
+   
     try {
 
         const orderno = await Order.countDocuments() + 1;
@@ -43,16 +43,13 @@ exports.editOrder = async (req, res) => {
         return res.status(400).json({error: errors.array()});
     }
 
-    const { orderId, placedat, name, phone, items, subtotal } = req.body;
+    const { _id, status } = req.body;
+    console.log(_id, status);
   
     try {
-        const filter = { _id: orderId };
+        const filter = { _id: _id };
         const update = { 
-            placedat, 
-            name, 
-            phone, 
-            items, 
-            subtotal 
+            status 
         };
 
         const findResult = await Order.findOne(filter);
@@ -70,20 +67,29 @@ exports.editOrder = async (req, res) => {
     }
 }
 
-exports.removeOrder = async (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
-    }
+exports.removeOrders = async (req, res) => {
     
     try {
-        const filter = { _id: req.body.orderId };
-        deleteResult = await Order.findOneAndRemove(filter);
+        // const filter = { _id: req.body.orderId };
+        // deleteResult = await Order.findOneAndRemove(filter);
+        console.log('Order Remove');
+        const deleteResult = await Order.remove({});
         console.log(deleteResult);
 
-        res.status(200).json({data: deleteResult !== null ? 'Order removed successfully' : 'can\'t remove this item'})
+        res.status(200).json({data: deleteResult !== null ? 'Today\'s Orders removed successfully' : 'can\'t remove orders'})
     } catch (error) {
         return res.status(400).json({ error: "Deletion failed, Try again !" });
+    }
+}
+
+exports.getOrders = async (req, res) => {
+
+    try {
+
+        const ordersResult = await Order.find();
+        res.status(200).json(ordersResult);
+
+    } catch (error) {
+        return res.status(400).json({ error : "Not getting Orders" });
     }
 }

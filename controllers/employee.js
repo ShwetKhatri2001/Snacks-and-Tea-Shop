@@ -75,3 +75,15 @@ exports.removeEmployee = async (req, res) => {
         return res.status(400).json({ error: "Deletion failed, Try again !" });
     }
 }
+
+exports.getEmployees = async (req, res) => {
+    
+    try {
+        const employeesResult = await Employee.find();
+
+        res.status(200).json(employeesResult);
+
+    } catch (error) {
+        return res.status(400).json({ error : "Not getting Employees" });
+    }
+}

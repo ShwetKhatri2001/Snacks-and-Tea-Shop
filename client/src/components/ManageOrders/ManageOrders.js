@@ -1,12 +1,72 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import AdminNav from '../AdminNav/AdminNav';
-import AllOrders from '../AllOrders/AllOrders.list';
-import { EditOrder, RemoveOrder } from '../../axios/instance';
+import { EditOrder, RemoveOrders, GetOrders } from '../../axios/instance';
 import { ToastContainer, toast } from 'react-toastify';
 import './ManageOrders.css';
 
 const ManageOrders = () => {
+
+    const [allorders, setAllOrders] = useState([]);
+  
+    const editOrder = async (_id, status) => {
+
+        const updatedorder = { _id, status }
+        const res = await EditOrder(updatedorder);
+
+        try{
+            if (!res.data.error)
+            {
+              toast.success(res.data.data);
+              setAllOrders(
+                allorders.map((order) => 
+                    order._id === _id ? {...order, status: status } : order
+                )
+              )
+            }
+        } catch (err) {
+            if (err.response)
+            {
+              toast.error(`${ err.response.data.error }`);
+            }
+        }
+    }
+
+    const removeTodaysOrders = async () => {
+        
+        const res = await RemoveOrders();
+
+        try{
+            if (!res.data.error)
+            {
+              toast.success(res.data.data);
+              setAllOrders([]);
+            }
+          } catch (err) {
+            if (err.response)
+            {
+              toast.error(`${ err.response.data.error }`);
+            }
+          }
+    }
+
+    useEffect( async () => {
+        
+        const res = await GetOrders(); 
+    
+        try{
+            if (!res.data.error)
+              {
+                setAllOrders(res.data);
+              }
+        } catch (err) {
+            if (err.response)
+            {
+                toast.error(`${ err.response.data.error }`);
+            }
+        }
+    
+    },[])
 
     return (
         <>
@@ -18,6 +78,9 @@ const ManageOrders = () => {
                     <Icon icon="ant-design:shopping-cart-outlined" className="title-icon"/>
                     <h1>Manage Orders</h1>
                 </div>
+                <button className="viewall-btn deleteorders" onClick={() => removeTodaysOrders()}>
+                    Delete Today 's Orders
+                </button>
             </div>
             <br />
             <div className="type_boxes">
@@ -26,7 +89,7 @@ const ManageOrders = () => {
                       <h3>Requests</h3>
                       <Icon icon="cil:book" className="title-icon"/>
                     </div>
-                    {AllOrders.map((request) => {
+                    {allorders.map((request) => {
                         if(request.status==="Request Received")
                           {
                             return(
@@ -43,8 +106,12 @@ const ManageOrders = () => {
                                         })
                                     }
                                     <div className="actionbtns">
-                                        <button className="primary">REJECT</button>
-                                        <button className="secondary">ACCEPT</button>
+                                        <button className="primary" 
+                                          onClick={() => editOrder(request._id, "Request Rejected")}> REJECT
+                                        </button>
+                                        <button className="secondary" 
+                                          onClick={() => editOrder(request._id, "Being Prepared")}> ACCEPT
+                                        </button>
                                     </div>
                                 </div>
                             )
@@ -56,7 +123,7 @@ const ManageOrders = () => {
                         <h3>Pending</h3>
                         <Icon icon="ic:round-pending-actions" className="title-icon" height="60"  color="#444"/>
                     </div>
-                    {AllOrders.map((request) => {
+                    {allorders.map((request) => {
                         if(request.status==="Being Prepared")
                           {
                             return(
@@ -73,7 +140,9 @@ const ManageOrders = () => {
                                         })
                                     }
                                     <div className="actionbtns">
-                                        <button className="primary">MARK AS DONE</button>
+                                        <button className="primary" 
+                                          onClick={() => editOrder(request._id, "Ready To Pick")}> MARK AS DONE
+                                        </button>
                                     </div>
                                 </div>
                             )
@@ -85,8 +154,8 @@ const ManageOrders = () => {
                         <h3>Finished</h3>
                         <Icon icon="bi:clipboard-check" className="title-icon"/>
                     </div>
-                    {AllOrders.map((request) => {
-                        if(request.status==="Ready to Pick")
+                    {allorders.map((request) => {
+                        if(request.status==="Ready To Pick")
                           {
                             return(
                                 <div className="request_box" key={request.orderno}>
@@ -102,14 +171,16 @@ const ManageOrders = () => {
                                         })
                                     }
                                     <div className="actionbtns">
-                                        <button className="primary">VIEW RECEIPT</button>
+                                        <button className="primary"
+                                          onClick={()=> editOrder(request._id, "Order Picked Up")}> PICKED UP
+                                        </button>
                                     </div>
                                 </div>
                             )
                           }
                     })}
                 </div>
-            </div>
+              </div>
             </div>
         </>
     )

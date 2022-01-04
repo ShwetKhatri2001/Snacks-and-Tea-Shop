@@ -1,21 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import AllOrders from './AllOrders.list'
+import { GetOrders } from '../../axios/instance';
+import { ToastContainer, toast } from 'react-toastify';
 import './ViewAllOrders.css';
 
 const ViewAllOrders = () => {
 
-  const renderData = (data, index) => {
+  const [allorders, setAllOrders] = useState([]);
 
-    return (
-      <tr key={index} className="orderrow">
-        <td>{data.orderno}</td>
-        <td>{data.placedat}</td>
-        <td>{data.name}</td>
-        <td>{data.status}</td>
-      </tr>
-    );
-  }
+  useEffect( async () => {
+      
+      const res = await GetOrders(); 
+
+      try{
+          if (!res.data.error)
+            {
+              setAllOrders(res.data);
+            }
+      } catch (err) {
+          if (err.response)
+          {
+              toast.error(`${ err.response.data.error }`);
+          }
+      }
+
+  },[])
+
 
   return (
     <div>
@@ -25,6 +35,7 @@ const ViewAllOrders = () => {
       </div>
 
       <div className="ordertable">
+          <ToastContainer position="bottom-left" bodyClassName="toastBody"/>
           <thead>
             <tr className="orderrow">
               <th>Order No</th>
@@ -34,7 +45,16 @@ const ViewAllOrders = () => {
             </tr>
           </thead>
           <tbody>
-            {AllOrders.map(renderData)}
+            { allorders.map((order) => {
+              return (
+                <tr key={order.orderno} className="orderrow">
+                  <td>{order.orderno}</td>
+                  <td>{order.placedat}</td>
+                  <td>{order.name}</td>
+                  <td>{order.status}</td>
+                </tr>
+              )
+            })}
           </tbody>
       </div>
 

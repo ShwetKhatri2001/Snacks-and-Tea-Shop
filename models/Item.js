@@ -15,7 +15,7 @@ const itemSchema = new mongoose.Schema({
         required: true
     },
     todays_sp: {
-        type: Boolean,
+        type: String,
         required: true
     },
     itemimg: {

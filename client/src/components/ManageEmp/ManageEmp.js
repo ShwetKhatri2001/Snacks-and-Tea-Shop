@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Icon } from '@iconify/react';
 import IconButton from '@material-ui/core/IconButton';
@@ -19,7 +19,7 @@ import Avatar from '@material-ui/core/Avatar';
 import AllEmployees  from '../EmpDetails/AllEmp.list';
 import AdminNav from '../AdminNav/AdminNav';
 import addempimg from "../../assets/addemp.jpg";
-import { AddEmployee, EditEmployee, RemoveEmployee } from '../../axios/instance';
+import { AddEmployee, EditEmployee, RemoveEmployee, GetEmployees } from '../../axios/instance';
 import { ToastContainer, toast } from 'react-toastify';
 
 const useRowStyles = makeStyles((theme) => ({
@@ -73,6 +73,175 @@ const useRowStyles = makeStyles((theme) => ({
 }));
 
 
+const ManageEmp = () => {
+
+  const [editIdx, setEditIdx] = useState(-1);
+  const [removeIdx, setRemoveIdx] = useState(-1);
+  const [allrows, setAllRows] = useState([]);
+  const classes = useRowStyles();
+
+  useEffect( async () => {
+      
+      const res = await GetEmployees(); 
+
+      try{
+          if (!res.data.error)
+            {
+              setAllRows(res.data);
+            }
+      } catch (err) {
+          if (err.response)
+          {
+              toast.error(`${ err.response.data.error }`);
+          }
+      }
+
+  },[])
+
+
+  const handleAddEmp = async () => {
+    const newemp = { 
+      empname: 'New Member',
+      emprole: 'Staff Member',
+      emploc: 'Jaipur',
+      empimg: addempimg,
+      empdate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`
+    };
+
+    const res = await AddEmployee(newemp); 
+
+    try{
+      if (!res.data.error)
+      {
+         toast.success('Employee added successfully');
+         setAllRows([res.data, ...allrows]);
+         setEditIdx(res.data._id); 
+      }
+   } catch (err) {
+      if (err.response)
+      {
+      toast.error(`${ err.response.data.error }`);
+      }
+   }
+
+  }
+
+  const StartEditing = (editid) => {
+    setEditIdx(editid);
+  }
+
+  const EndEditing = async (editid) => {
+
+    let editemployee = {}
+    
+    allrows.map((row) => {
+      if(row._id == editid) 
+         editemployee = row
+      }
+    )
+
+    const res = await EditEmployee(editemployee); 
+
+    try{
+        if (!res.data.error)
+        {
+          toast.success(res.data.data);
+          setEditIdx(-1);
+        }
+    } catch (err) {
+        if (err.response)
+        {
+          toast.error(`${ err.response.data.error }`);
+        }
+    }
+    setEditIdx(-1);
+  }
+
+  const StartRemoving = (removeid) => {
+    setRemoveIdx(removeid);
+  }
+
+  const EndRemoving = async (removeid) => {
+
+    const res = await RemoveEmployee({ _id : removeid }); 
+
+    try{
+      if (!res.data.error)
+      {
+        toast.success(res.data.data);
+        setAllRows( allrows.filter((row) => row._id !== removeid ));
+        setRemoveIdx(-1);
+      }
+    } catch (err) {
+      if (err.response)
+      {
+        toast.error(`${ err.response.data.error }`);
+      }
+    }
+  }
+
+  const CancelRemoving = () => {
+    setRemoveIdx(-1);
+  }
+
+  const handleChange = (e, name, changeid) => {
+    const { value } = e.target;
+    setAllRows(
+      allrows.map((row) => 
+          row._id === changeid ? {...row, [name] : value} : row
+      )
+    )
+  }
+
+  return (
+    <>
+      <AdminNav />
+      <ToastContainer position="bottom-left" bodyClassName="toastBody"/>
+      <div className="admin_items">
+      <div className="title-orders">
+          <div className="title">
+              <Icon icon="clarity:group-solid" className="title-icon"/>
+              <h1>Manage Employees</h1>
+          </div>
+          <button className="viewall-btn" onClick={() => handleAddEmp()}>
+              Add Employee
+          </button>
+      </div>
+      <br />
+    <TableContainer component={Paper}>
+      <Table aria-label="collapsible table">
+        <TableHead>
+          <TableRow className={classes.header}>
+            <TableCell className={classes.historycell}/>
+            <TableCell align="left">Name</TableCell>
+            <TableCell align="left">Position</TableCell>
+            <TableCell align="left">Location</TableCell>
+            <TableCell align="left">Joining Date</TableCell>
+            <TableCell align="left">Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {allrows.map((row) => (
+            <Row 
+              key={row._id} 
+              row={row} 
+              editIdx={editIdx}
+              removeIdx={removeIdx}
+              handleChange={handleChange}
+              StartEditing = {StartEditing}
+              EndEditing = {EndEditing}
+              StartRemoving = {StartRemoving}
+              EndRemoving = {EndRemoving}
+              CancelRemoving = {CancelRemoving}
+            />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    </div>
+    </>
+  );
+}
 
 const Row = (props) => {
   const { row, editIdx, removeIdx, handleChange, StartEditing, EndEditing, StartRemoving, EndRemoving, CancelRemoving } = props;
@@ -183,158 +352,6 @@ const Row = (props) => {
         </>
       }
       </TableRow>
-    </>
-  );
-}
-
-const ManageEmp = () => {
-
-  const [editIdx, setEditIdx] = useState(-1);
-  const [removeIdx, setRemoveIdx] = useState(-1);
-  const [allrows, setAllRows] = useState(AllEmployees);
-  const classes = useRowStyles();
-
-  const handleAddEmp = async () => {
-    const newemp = { 
-      empname: 'New Member',
-      emprole: 'Staff Member',
-      emploc: 'Jaipur',
-      empimg: addempimg,
-      empdate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`
-    };
-
-    const res = await AddEmployee(newemp); 
-
-    try{
-      if (!res.data.error)
-      {
-         toast.success('Employee added successfully');
-         setAllRows([res.data, ...allrows]);
-         setEditIdx(res.data._id); 
-      }
-   } catch (err) {
-      if (err.response)
-      {
-      toast.error(`${ err.response.data.error }`);
-      }
-   }
-
-  }
-
-  const StartEditing = (editid) => {
-    setEditIdx(editid);
-  }
-
-  const EndEditing = async (editid) => {
-
-    let editemployee = {}
-    
-    allrows.map((row) => {
-      if(row._id == editid) 
-         editemployee = row
-      }
-    )
-
-    const res = await EditEmployee(editemployee); 
-
-    try{
-        if (!res.data.error)
-        {
-          toast.success(res.data.data);
-          setEditIdx(-1);
-        }
-    } catch (err) {
-        if (err.response)
-        {
-          toast.error(`${ err.response.data.error }`);
-        }
-    }
-    setEditIdx(-1);
-  }
-
-  const StartRemoving = (removeid) => {
-    setRemoveIdx(removeid);
-  }
-
-  const EndRemoving = async (removeid) => {
-
-    const res = await RemoveEmployee({ _id : removeid }); 
-
-    try{
-      if (!res.data.error)
-      {
-        toast.success(res.data.data);
-        setAllRows( allrows.filter((row) => row._id !== removeid ));
-        setRemoveIdx(-1);
-      }
-    } catch (err) {
-      if (err.response)
-      {
-        toast.error(`${ err.response.data.error }`);
-      }
-    }
-  }
-
-  const CancelRemoving = () => {
-    setRemoveIdx(-1);
-  }
-
-  const handleChange = (e, name, changeid) => {
-    const { value } = e.target;
-    setAllRows(
-      allrows.map((row) => 
-          row._id == changeid ? {...row, [name] : value} : row
-      )
-    )
-  }
-
-
-  return (
-    <>
-      <AdminNav />
-      <ToastContainer position="bottom-left" bodyClassName="toastBody"/>
-      <div className="admin_items">
-      <div className="title-orders">
-          <div className="title">
-              <Icon icon="clarity:group-solid" className="title-icon"/>
-              <h1>Manage Employees</h1>
-          </div>
-          <button className="viewall-btn" onClick={() => handleAddEmp()}>
-              Add Employee
-          </button>
-      </div>
-      <br />
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow className={classes.header}>
-            <TableCell className={classes.historycell}/>
-            <TableCell align="left">Name</TableCell>
-            <TableCell align="left">Position</TableCell>
-            <TableCell align="left">Location</TableCell>
-            <TableCell align="left">Joining Date</TableCell>
-            <TableCell align="left">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {allrows.map((row) => (
-            <Row 
-              key={row._id} 
-              row={row} 
-              editIdx={editIdx}
-              removeIdx={removeIdx}
-              handleChange={handleChange}
-              StartEditing = {StartEditing}
-              EndEditing = {EndEditing}
-              StartRemoving = {StartRemoving}
-              EndRemoving = {EndRemoving}
-              CancelRemoving = {CancelRemoving}
-            />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </div>
     </>
   );
 }

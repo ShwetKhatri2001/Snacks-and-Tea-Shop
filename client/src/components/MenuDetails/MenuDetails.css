@@ -4,6 +4,7 @@
 
 .admin_items {
     margin-left: 350px;
+    min-width: 77vw;
 }
 
 .managebtn{
@@ -13,10 +14,6 @@
    align-items: right;
    justify-content: right;
    text-decoration: none;
-}
-
-.empdiv{
-    background-color:#88C198;
 }
 
 .empbtn {
