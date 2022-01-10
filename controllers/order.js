@@ -8,7 +8,7 @@ exports.placeOrder = async (req,res) => {
     }
 
     const { placedat, name, phone, items, subtotal } = req.body;
-   
+    
     try {
 
         const orderno = await Order.countDocuments() + 1;
@@ -70,8 +70,6 @@ exports.editOrder = async (req, res) => {
 exports.removeOrders = async (req, res) => {
     
     try {
-        // const filter = { _id: req.body.orderId };
-        // deleteResult = await Order.findOneAndRemove(filter);
         console.log('Order Remove');
         const deleteResult = await Order.remove({});
         console.log(deleteResult);

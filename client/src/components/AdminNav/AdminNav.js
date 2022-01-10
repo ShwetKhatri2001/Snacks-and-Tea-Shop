@@ -29,15 +29,13 @@ const AdminNav = () => {
     return (
         <div className="adminnav">
             {
-                AdminLinks.map((obj) => {
-                    return (
-                    <Link to={obj.linkto} className={ location.pathname  === obj.linkto ? `admintitle activetitle` : `admintitle`}
+                AdminLinks.map((obj, idx) => 
+                    <Link to={obj.linkto} key={idx} className={ location.pathname  === obj.linkto ? `admintitle activetitle` : `admintitle`}
                         onClick={window.scrollTo(0,0)}>
                         <Icon icon={obj.icon} className="title-icon"/>
                         <h1>{obj.name}</h1>
                     </Link>
                     )
-                })
             }
         </div>
     )

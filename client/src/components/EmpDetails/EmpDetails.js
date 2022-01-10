@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import AdminNav from '../AdminNav/AdminNav';
 import EmpCard from '../EmpCard/EmpCard';
@@ -8,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 const EmpDetails = () => {
 
     const [allemployees, setAllEmployees] = useState([]);
+    const navigate = useNavigate();
 
     useEffect( async () => {
       
@@ -22,6 +24,8 @@ const EmpDetails = () => {
             if (err.response)
             {
                 toast.error(`${ err.response.data.error }`);
+                if(err.response.data.error === 'Please login to view this page')
+                   navigate('/signin')
             }
         }
     },[])

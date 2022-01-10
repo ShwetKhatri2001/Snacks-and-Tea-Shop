@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import AdminNav from '../AdminNav/AdminNav';
 import { EditOrder, RemoveOrders, GetOrders } from '../../axios/instance';
@@ -8,6 +9,7 @@ import './ManageOrders.css';
 const ManageOrders = () => {
 
     const [allorders, setAllOrders] = useState([]);
+    const navigate = useNavigate();
   
     const editOrder = async (_id, status) => {
 
@@ -28,6 +30,8 @@ const ManageOrders = () => {
             if (err.response)
             {
               toast.error(`${ err.response.data.error }`);
+              if(err.response.data.error === 'Please login to view this page')
+                navigate('/signin')
             }
         }
     }
@@ -46,6 +50,8 @@ const ManageOrders = () => {
             if (err.response)
             {
               toast.error(`${ err.response.data.error }`);
+              if(err.response.data.error === 'Please login to view this page')
+                navigate('/signin')
             }
           }
     }
@@ -63,6 +69,8 @@ const ManageOrders = () => {
             if (err.response)
             {
                 toast.error(`${ err.response.data.error }`);
+                if(err.response.data.error === 'Please login to view this page')
+                  navigate('/signin')
             }
         }
     

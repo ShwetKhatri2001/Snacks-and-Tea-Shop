@@ -1,5 +1,6 @@
 const {validationResult} = require("express-validator");
 const Employee = require("../models/Employee");
+const jwt = require("jsonwebtoken");
 
 exports.addEmployee = async (req, res) => {
     const errors = validationResult(req);
@@ -62,7 +63,7 @@ exports.removeEmployee = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+        return res.status(400).json({error: errors.array()});
     }
     
     try {
@@ -87,3 +88,39 @@ exports.getEmployees = async (req, res) => {
         return res.status(400).json({ error : "Not getting Employees" });
     }
 }
+
+const MAX_AGE = 7 * 24 * 60 * 60;
+const createwebToken = (payload) => {
+  return jwt.sign(payload, process.env.JWTSECRET, {
+    expiresIn: MAX_AGE,
+  });
+};
+
+exports.signinEmployee = async (req,res) => {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({error: errors.array()});
+    }
+
+    const { name, password } = req.body;
+
+    try{
+
+        if(password.toLowerCase() === process.env.SHOPPASS.toLowerCase())
+        {
+            const payload = { password : process.env.SHOPPASS, isAuth : true}
+            const token = createwebToken(payload);
+            console.log(token);
+            res.cookie("jwt", token, { expires: new Date(Date.now() + 86400000),sameSite: false, secure:false});
+            console.log('You are logged in successfully');
+            res.status(200).json({data: 'You are logged in successfully'});            
+        }
+        else return res.status(400).json({error: "Invalid SignIn Credentials" })
+
+    } catch (error) {
+        return res.status(400).json({ error: "Invalid SignIn Credentials"})
+    }
+}
+

@@ -7,6 +7,7 @@ export const server = axios.create({
       Accept: "application/json",
       "Content-Type": "application/json",
     },
+    withCredentials: true
 });
 
 export const PlaceNewOrder = (data) => server.post(`${url}/api/order/placeorder`, data);
@@ -22,5 +23,5 @@ export const GetOrders = (data) => server.get(`${url}/api/order/getorders`);
 export const GetEmployees = (data) => server.get(`${url}/api/emp/getemployees`);
 export const GetItems = (data) => server.get(`${url}/api/menu/getitems`);
 export const GetTodaysItems = (data) => server.get(`${url}/api/menu/gettodayssp`);
-
+export const SignInEmployee = (data) => server.post(`${url}/api/emp/signinemployee`, data)
 

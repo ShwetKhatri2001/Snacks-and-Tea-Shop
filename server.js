@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const path = require('path');
 const logger = require('morgan');
@@ -9,8 +10,13 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 const app = express(); 
-app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+const corsOpts = {
+  origin: ['http://localhost:3000'],
+  credentials: true,
+};
+app.use(cors(corsOpts));
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));

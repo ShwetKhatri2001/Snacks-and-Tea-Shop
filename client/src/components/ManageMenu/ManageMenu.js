@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { useNavigate } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import { Icon } from '@iconify/react';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from "@material-ui/core/TextField";
@@ -16,9 +17,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import Avatar from '@material-ui/core/Avatar';
-import AllItems  from '../AllItems/AllItems.list';
 import AdminNav from '../AdminNav/AdminNav';
-// import addfoodimg from "../../assets/addfood.jpg";
 import { AddItem, EditItem, RemoveItem, GetItems } from '../../axios/instance';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -78,6 +77,7 @@ const ManageMenu = () => {
   const [removeIdx, setRemoveIdx] = useState(-1);
   const [allrows, setAllRows] = useState([]);
   const classes = useRowStyles();
+  const navigate = useNavigate();
 
   useEffect( async () => {
       
@@ -92,11 +92,11 @@ const ManageMenu = () => {
           if (err.response)
           {
               toast.error(`${ err.response.data.error }`);
+              if(err.response.data.error === 'Please login to view this page')
+                navigate('/signin')
           }
       }
-
   },[])
-
 
   const handleAddItem = async () => {
     const newitem = { 
@@ -119,7 +119,9 @@ const ManageMenu = () => {
    } catch (err) {
       if (err.response)
       {
-      toast.error(`${ err.response.data.error }`);
+        toast.error(`${ err.response.data.error }`);
+        if(err.response.data.error === 'Please login to view this page')
+          navigate('/signin')
       }
    }
 
@@ -151,6 +153,8 @@ const ManageMenu = () => {
         if (err.response)
         {
           toast.error(`${ err.response.data.error }`);
+          if(err.response.data.error === 'Please login to view this page')
+            navigate('/signin')
         }
     }
     setEditIdx(-1);
@@ -176,6 +180,8 @@ const ManageMenu = () => {
       if (err.response)
       {
         toast.error(`${ err.response.data.error }`);
+        if(err.response.data.error === 'Please login to view this page')
+          navigate('/signin')
       }
     }
   }

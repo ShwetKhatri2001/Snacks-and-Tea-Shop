@@ -1,8 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 .login-page-outer{
-  background: url("https://admissions.lnmiit.ac.in/assets/img/infra-banner.jpg") no-repeat center;
+  background: url("https://www.wallpapertip.com/wmimgs/144-1443691_tea-coffee-background.jpg") no-repeat center;
   background-size:95vw 85vh;
+  border-radius: 10px;
 }
 .login-page {
   height: 85vh;
@@ -20,21 +21,24 @@
   margin: 0 auto 100px;
   padding: 45px;
   text-align: center;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  box-shadow:-1px 3px 3px rgba(0,0,0,0.2);
+  border-radius: 10px;
 }
 .form input {
-  font-family: "Roboto", sans-serif;
-  outline: 0;
+  font-family: 'Montserrat', sans-serif;
   background: #f2f2f2;
   width: 100%;
   border: 0;
+  outline: 0;
   margin: 0 0 15px;
   padding: 15px;
   box-sizing: border-box;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px;
 }
 .form button {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   text-transform: uppercase;
   outline: 0;
   background: #eeb365;
@@ -50,15 +54,7 @@
 .form button:hover,.form button:active,.form button:focus {
   background: #eeb365;
 }
-.form .message {
-  margin: 15px 0 0;
-  color: #b3b3b3;
-  font-size: 12px;
-}
-.form .message a {
-  color: #eeb365;
-  text-decoration: none;
-}
+
 .form .register-form {
   display: none;
 }

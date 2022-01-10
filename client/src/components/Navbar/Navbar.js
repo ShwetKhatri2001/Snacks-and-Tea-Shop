@@ -14,7 +14,7 @@ const Navbar = () => {
                 <Link to="/" className="shoplink" ><h3>Vinayak Snacks and Tea</h3></Link>
             </div>
             <div className="right_nav">
-                <Link to="/menudetails">
+                <Link to="/signin">
                 <button className="viewall-btn">
                     Shop Staff
                 </button>

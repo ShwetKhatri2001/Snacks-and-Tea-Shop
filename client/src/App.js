@@ -14,7 +14,6 @@ import SignIn from "./components/SignIn/SignIn";
 import ManageMenu from "./components/ManageMenu/ManageMenu";
 import ManageEmp from "./components/ManageEmp/ManageEmp";
 import 'react-toastify/dist/ReactToastify.css';
-import './App.css';
 
 const App = () => {
 
