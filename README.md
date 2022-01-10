@@ -23,10 +23,12 @@
 
 ## 🧰 Installation
 
-First follow these commands and follow mentioned steps to get your app ready with installation.
+First follow these commands and mentioned steps to get your app ready with installation.
+
+* Fork this repository.
 
 ```bash
-git clone https://github.com/ShwetKhatri2001/Snacks-and-Tea-Shop.git
+git clone https://github.com/<your_github_username>/Snacks-and-Tea-Shop.git
 ```
 
 ```bash
@@ -43,6 +45,8 @@ After installations, make a file `.env` in the root directory of the project.
 * Second add `MONGO_URI` which is the mongodb database link.
 Visit [Mongo DB](https://www.mongodb.com/) and sign up for the free API Key. Then go back to your [Mongo DB](https://www.mongodb.com/) account and must create a database cluster as your server for this application. Here is a [guide](https://docs.mongodb.com/manual/tutorial/atlas-free-tier-setup/) on how to create
 * Third one is `NODE_ENV` which could be 'development' or 'production' based on your app's status.
+* Fourth add a secured password for the shop as `SHOPPASS`
+* Fifth add a `JWTSECRET` which could be any long string that we use for creating json web tokens.
 
 Then start the react app on localhost and start the backend server using these command.
 
